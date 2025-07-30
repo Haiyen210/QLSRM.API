@@ -6,6 +6,7 @@ using Microsoft.Net.Http.Headers;
 using Org.BouncyCastle.Asn1.Ocsp;
 using QLSRM.Common;
 using QLSRM.Library;
+using QLSRM.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,7 +21,7 @@ namespace NTH.WOW.Common
     {
         private static Microsoft.AspNetCore.Http.HttpContext _context;
 
-        public static string RenderAccessToken(Employee access_user)
+        public static string RenderAccessToken(Account access_user)
         {
             var jwtToken = new JwtSecurityToken(
                 claims: GetTokenClaims(access_user),
@@ -77,7 +78,7 @@ namespace NTH.WOW.Common
             }
             return Commonfunc.ConvertToType<T>(null);
         }
-        private static IEnumerable<Claim> GetTokenClaims(Employee access_user)
+        private static IEnumerable<Claim> GetTokenClaims(Account access_user)
         {
             return new List<Claim>
             {

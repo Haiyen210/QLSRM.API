@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using NTH.WOW.Common;
 using QLSRM.BL;
 using QLSRM.Common;
 using QLSRM.DL;
 using QLSRM.Library;
 using QLSRM.Models;
+using QLSRM.Respones;
 using System.Data;
 namespace QLSRM.API.Controllers
 {
@@ -12,69 +14,69 @@ namespace QLSRM.API.Controllers
     [ApiController]
     public class AuthenController : ControllerBase
     {
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login(LoginParam login)
-        //{
-        //    var response = new Response();
-        //    try
-        //    {
-        //        if (login != null && !string.IsNullOrWhiteSpace(login.UserName) && !string.IsNullOrWhiteSpace(login.Password))
-        //        {
-        //            var blEmployee = new BLEmployee();
-        //            var employee = blEmployee.Login(login);
-        //            if (employee != null)
-        //            {
-        //                var token = AuthozirationUtility.RenderAccessToken(employee);
-        //                if (!string.IsNullOrWhiteSpace(token))
-        //                {
-        //                    LoginRespone res = new LoginRespone() { Token = $"{JwtBearerDefaults.AuthenticationScheme} {token}", User = employee };
-        //                    response.SetSuccess(res);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                response.SetError(ErrorCode.EmployeeNotFound, "Không tìm thấy tài khoản");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            response.SetError(ErrorCode.InvalidParam, "Tham số không hợp lệ");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.SetError(ErrorCode.Unknown, ex.ToString());
-        //    }
-        //    return StatusCode(StatusCodes.Status200OK, response);
-        //}
-        //[HttpPost("register")]
-        //public async Task<IActionResult> Register([FromBody] List<Member> member)
-        //{
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginParam login)
+        {
+            var response = new Response();
+            try
+            {
+                if (login != null && !string.IsNullOrWhiteSpace(login.UserName) && !string.IsNullOrWhiteSpace(login.Password))
+                {
+                    var blAccount = new BLAccount();
+                    var account = blAccount.Login(login);
+                    if (account != null)
+                    {
+                        var token = AuthozirationUtility.RenderAccessToken(account);
+                        if (!string.IsNullOrWhiteSpace(token))
+                        {
+                            LoginRespone res = new LoginRespone() { Token = $"{JwtBearerDefaults.AuthenticationScheme} {token}", User = account };
+                            response.SetSuccess(res);
+                        }
+                    }
+                    else
+                    {
+                        response.SetError(ErrorCode.EmployeeNotFound, "Không tìm thấy tài khoản");
+                    }
+                }
+                else
+                {
+                    response.SetError(ErrorCode.InvalidParam, "Tham số không hợp lệ");
+                }
+            }
+            catch (Exception ex)
+            {
+                response.SetError(ErrorCode.Unknown, ex.ToString());
+            }
+            return StatusCode(StatusCodes.Status200OK, response);
+        }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] List<Account> account)
+        {
 
-        //    var response = new Response();
-        //    try
-        //    {
-        //        var _blMember = new BLMember();
-        //        if (member?.Count > 0)
-        //        {
-        //            foreach (var item in member)
-        //            {
-        //                item.Status = (int)MemberStatus.WaitActive;
-        //            }
-        //            var employees = _blMember.SaveData(member);
-        //            if (employees)
-        //            {
-        //                response.SetSuccess(employees);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.SetError(ErrorCode.Unknown, ex.ToString());
-        //    }
+            var response = new Response();
+            try
+            {
+                var blAccount = new BLAccount();
+                if (account?.Count > 0)
+                {
+                    foreach (var item in account)
+                    {
+                        item.Status = (int)MemberStatus.Active;
+                    }
+                    var accounts = blAccount.SaveData(account);
+                    if (accounts)
+                    {
+                        response.SetSuccess(accounts);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.SetError(ErrorCode.Unknown, ex.ToString());
+            }
 
-        //    return StatusCode(StatusCodes.Status200OK, response);
-        //}
+            return StatusCode(StatusCodes.Status200OK, response);
+        }
         //[HttpPost("RegisterEmployee")]
         //public async Task<IActionResult> RegisterEmployee([FromBody] List<Employee> employee)
         //{
@@ -251,7 +253,7 @@ namespace QLSRM.API.Controllers
 
         //    return StatusCode(StatusCodes.Status200OK, response);
         //}
-    
-    
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QLSRM.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,6 @@ namespace QLSRM.Respones
     public class LoginRespone
     {
         public string Token { get; set; }
-        //public Employee User { get; set; }
+        public Account User { get; set; }
     }
 }
