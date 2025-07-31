@@ -82,14 +82,12 @@ namespace NTH.WOW.Common
         {
             return new List<Claim>
             {
-                //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                //new Claim(JwtRegisteredClaimNames.Email, access_user.Email),
-                //new Claim(JwtRegisteredClaimNames.GivenName, access_user.EmployeeName),
-                //new Claim(JwtRegisteredClaimNames.Gender, access_user.Gender.ToString()),
-                //new Claim(JwtRegisteredClaimNames.Name, access_user.EmployeeCode),
-                //new Claim(JwtRegisteredClaimNames.Sid, access_user.Id.ToString()),
-                //new Claim(JwtRegisteredClaimNames.NameId, access_user.Id.ToString()),
-                //new Claim(Constant.mscRoles, access_user.Roles.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, access_user.Email),
+                new Claim(JwtRegisteredClaimNames.Gender, access_user.Gender.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sid, access_user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.NameId, access_user.Id.ToString()),
+                new Claim(Constant.mscRoles, access_user.Roles.ToString()),
                 new Claim(Constant.mscAppCode, ConfigUtil.GetAppSettings<string>(AppSettingKeys.AppCode)),
             };
         }

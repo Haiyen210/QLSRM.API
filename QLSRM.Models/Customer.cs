@@ -15,7 +15,9 @@ namespace QLSRM.Models
         public int Gender { get; set; }
         public int OrderType { get; set; }
         public long ComboId { get; set; }
+        public string ComboName { get; set; }
         public long ProductId { get; set; }
+        public string ProductName { get; set; }
         public decimal ComboPrice { get; set; }
         public int TotalMealsPurchased { get; set; } //Tổng số suất ăn trong ngày
         public int MealsRemaining { get; set; } //Số suất ăn còn lại
@@ -24,8 +26,11 @@ namespace QLSRM.Models
         public string Note { get; set; } 
         public int Status { get; set; }
         public long ProvinceId { get; set; }
+        public string ProvinceName { get; set; }
         public long DistrictId { get; set; }
+        public string DistrictName { get; set; }
         public long CommuneId { get; set; }
+        public string CommuneName { get; set; }
         public string GenderName
         {
             get

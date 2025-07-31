@@ -11,7 +11,7 @@ namespace QLSRM.Models
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
-        public int STT { get; set; }
+        //public int STT { get; set; }
         public EditMode EditMode { get; set; }
         /// <summary>
         /// hàm set giá trị cho property
