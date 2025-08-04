@@ -10,6 +10,7 @@ namespace QLSRM.Models
     {
         public string ComboCode { get; set; }
         public string ComboName { get; set; }
+        public int NumberOfDate { get; set; }
         public int TotalMeals { get; set; }
         public string Description { get; set; }
         public int Status { get; set; }

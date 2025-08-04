@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using NTH.WOW.Common;
 using QLSRM.BL;
 using QLSRM.Common;
 using QLSRM.DL;
@@ -29,6 +28,10 @@ namespace QLSRM.API.Controllers
                         var token = AuthozirationUtility.RenderAccessToken(account);
                         if (!string.IsNullOrWhiteSpace(token))
                         {
+                            HttpContext.Session.SetString("UserId", account.Id.ToString());
+                            HttpContext.Session.SetString("UserName", account.Name ?? "");
+                            HttpContext.Session.SetString("UserRoles", account.Roles.ToString() ?? "");
+
                             LoginRespone res = new LoginRespone() { Token = $"{JwtBearerDefaults.AuthenticationScheme} {token}", User = account };
                             response.SetSuccess(res);
                         }

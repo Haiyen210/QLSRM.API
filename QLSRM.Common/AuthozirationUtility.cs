@@ -15,9 +15,9 @@ using System.Security.Claims;
 using System.Text;
 using static System.Net.WebRequestMethods;
 
-namespace NTH.WOW.Common
+namespace QLSRM.Common
 {
-    public class AuthozirationUtility 
+    public class AuthozirationUtility
     {
         private static Microsoft.AspNetCore.Http.HttpContext _context;
 
@@ -26,7 +26,7 @@ namespace NTH.WOW.Common
             var jwtToken = new JwtSecurityToken(
                 claims: GetTokenClaims(access_user),
                 expires: DateTime.Now.AddHours(24),
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constant.SecretSercurityKey)), SecurityAlgorithms.HmacSha256)
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constant.SecretSecurityKey)), SecurityAlgorithms.HmacSha256)
             );
 
             return new JwtSecurityTokenHandler().WriteToken(jwtToken);
@@ -80,17 +80,20 @@ namespace NTH.WOW.Common
         }
         private static IEnumerable<Claim> GetTokenClaims(Account access_user)
         {
-            return new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, access_user.Email),
-                new Claim(JwtRegisteredClaimNames.Gender, access_user.Gender.ToString()),
-                new Claim(JwtRegisteredClaimNames.Sid, access_user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.NameId, access_user.Id.ToString()),
-                new Claim(Constant.mscRoles, access_user.Roles.ToString()),
-                new Claim(Constant.mscAppCode, ConfigUtil.GetAppSettings<string>(AppSettingKeys.AppCode)),
-            };
+          var listClaim =  new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, access_user.Email ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Name, access_user.Name ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Gender, access_user.Gender.ToString() ?? "Unknown"),
+            new Claim(JwtRegisteredClaimNames.Sid, access_user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.NameId, access_user.Id.ToString()),
+            new Claim(Constant.mscRoles, access_user.Roles.ToString() ?? string.Empty),
+            new Claim(Constant.mscAppCode, ConfigUtil.GetAppSettings<string>(AppSettingKeys.AppCode) ?? string.Empty),
+        };
+            return listClaim;
         }
+     
 
     }
 }

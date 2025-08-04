@@ -54,7 +54,7 @@ builder.Services.AddAuthentication(o =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(Constant.SecretSercurityKey)),
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(Constant.SecretSecurityKey)),
         ValidateIssuer = false,
         ValidateAudience = false,
     };
@@ -91,6 +91,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.UseMiddleware<HandleMiddleware>();
-
 app.Run();
 

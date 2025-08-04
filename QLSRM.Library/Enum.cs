@@ -14,8 +14,9 @@
     public enum Roles
     {
         None = 0,
-        Admin = 2,
-        Member = 4,
+        Admin = 1,
+        Staff = 2,
+        Shipper = 3
     }
     public enum ErrorCode
     {
