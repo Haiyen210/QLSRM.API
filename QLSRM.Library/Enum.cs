@@ -37,12 +37,13 @@
         InvalidRole = 14,
 
     }
-    public enum MemberStatus
+    public enum OrderStatus
     {
         None = 0,
-        Active = 1,
-        DeActivate = 2,
-        WaitActive = 3
+        WaitDelivery = 1,
+        Delivering = 2,
+        SuccessfulDelivery = 3,
+        CancelOrder = 4
 
     }
     public enum StatusPayReward
