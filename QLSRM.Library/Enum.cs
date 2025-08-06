@@ -46,14 +46,7 @@
         CancelOrder = 4
 
     }
-    public enum StatusPayReward
-    {
-        None = 0,
-        Success = 1,
-        AreTrading = 2,
-        Cancel = 3
-    }
-    public enum StatusEmployee
+    public enum StatusAccount
     {
         None = 0,
         Active = 1,

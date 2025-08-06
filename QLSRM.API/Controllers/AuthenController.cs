@@ -64,7 +64,7 @@ namespace QLSRM.API.Controllers
                 {
                     foreach (var item in account)
                     {
-                        item.Status = (int)MemberStatus.Active;
+                        item.Status = (int)StatusAccount.Active;
                     }
                     var accounts = blAccount.SaveData(account);
                     if (accounts)
