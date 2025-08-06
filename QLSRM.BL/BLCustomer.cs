@@ -22,30 +22,58 @@ namespace QLSRM.BL
 
         public override void AfterSaveData<T>(List<T> datas)
         {
-            base.AfterSaveData(datas);
-            if (datas?.Count > 0)
+            try
             {
-                var orderDaily = new List<DailyOrder>();
-                foreach (var o in datas)
+                base.AfterSaveData(datas);
+                if (datas?.Count > 0)
                 {
-                    Customer customer = Common.Commonfunc.CastToSpecificType<Customer>(o);
-                    var combo = _dlBase.GetById<ComboTypes>(customer.ComboId);
-                    if (customer != null && customer.EditMode == EditMode.Add)
+                    var orderDaily = new List<DailyOrder>();
+                    var notification = new List<Notification>();
+                    decimal price = 0;
+                    int quantity = 0;
+                    foreach (var o in datas)
                     {
-                        if (customer.OrderType == 1)
+                        Customer customer = Common.Commonfunc.CastToSpecificType<Customer>(o);
+                        var combo = _dlBase.GetById<ComboTypes>(customer.ComboId);
+
+                        if (customer != null && customer.EditMode == EditMode.Add)
                         {
-                            DateTime startDate = customer.StartDate;
-                            DateTime endDate = customer.EndDate;
-                            for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+                            if (customer.OrderType == 1)
+                            {
+                                DateTime startDate = customer.StartDate;
+                                DateTime endDate = customer.EndDate;
+                                for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+                                {
+                                    var orderCode = _dlBase.SelectNewCode<string>("DailyOrder");
+                                    if (combo.NumberOfDate != 0)
+                                    {
+                                        price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
+                                        quantity = combo.TotalMeals / combo.NumberOfDate;
+                                    }
+                                    orderDaily.Add(new DailyOrder()
+                                    {
+                                        CustomerId = customer.Id,
+                                        OrderCode = orderCode,
+                                        ComboId = customer.ComboId,
+                                        ProvinceId = customer.ProvinceId,
+                                        CommuneId = customer.CommuneId,
+                                        DistrictId = customer.DistrictId,
+                                        Address = customer.Address,
+                                        PhoneNumber = customer.PhoneNumber,
+                                        OrderType = customer.OrderType,
+                                        Quantity = quantity,
+                                        Status = (int)OrderStatus.WaitDelivery,
+                                        Note = customer.Note,
+                                        Price = price,
+                                        DeliveryDate = date,
+                                        EditMode = EditMode.Add,
+                                    });
+                                }
+
+                            }
+                            else
                             {
                                 var orderCode = _dlBase.SelectNewCode<string>("DailyOrder");
-                                decimal price = 0;
-                                int quantity = 0;
-                                if (combo.NumberOfDate != 0)
-                                {
-                                    price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
-                                    quantity = combo.TotalMeals / combo.NumberOfDate;
-                                }
                                 orderDaily.Add(new DailyOrder()
                                 {
                                     CustomerId = customer.Id,
@@ -57,86 +85,98 @@ namespace QLSRM.BL
                                     Address = customer.Address,
                                     PhoneNumber = customer.PhoneNumber,
                                     OrderType = customer.OrderType,
-                                    Quantity = quantity,
+                                    Quantity = customer.TotalMealsPurchased,
                                     Status = (int)OrderStatus.WaitDelivery,
                                     Note = customer.Note,
-                                    Price = price,
-                                    DeliveryDate = date,
+                                    Price = customer.ComboPrice,
+                                    DeliveryDate = DateTime.Now,
                                     EditMode = EditMode.Add,
                                 });
+
                             }
-                        }
-                        else
-                        {
-                            var orderCode = _dlBase.SelectNewCode<string>("DailyOrder");
-                            decimal price = 0;
-                            int quantity = 0;
-                            orderDaily.Add(new DailyOrder()
+                            notification.Add(new Notification()
                             {
-                                CustomerId = customer.Id,
-                                OrderCode = orderCode,
-                                ComboId = customer.ComboId,
-                                ProvinceId = customer.ProvinceId,
-                                CommuneId = customer.CommuneId,
-                                DistrictId = customer.DistrictId,
-                                Address = customer.Address,
-                                PhoneNumber = customer.PhoneNumber,
-                                OrderType = customer.OrderType,
-                                Quantity = customer.TotalMealsPurchased,
-                                Status = (int)OrderStatus.WaitDelivery,
-                                Note = customer.Note,
-                                Price = customer.ComboPrice,
-                                DeliveryDate = DateTime.Now,
-                                EditMode = EditMode.Add,
+                                Message = "Khách hàng " + customer.CustomerName + " đã đăng ký thành công!",
+                                NotificationType = (int)ActionNotifi.AddCustomer,
+                                ActionDescription = "Thêm khách hàng mới",
+                                Status = (int)StatusNoti.Active,
                             });
-                        }
 
-                    }
-                    if (customer != null && customer.EditMode == EditMode.Update)
-                    {
-                        var deviveryHistory = new List<DeliveryHistory>();
-                        List<DailyOrder> orderDetail = _blDailyOrder.GetDailyOrderByCustomer(customer.Id); // Lấy khách hàng mà trạng thái là chờ giao                      
-                        if (orderDetail?.Count > 0)
+                        }
+                        if (customer != null && customer.EditMode == EditMode.Update)
                         {
-                            foreach (var item in orderDetail)
+                            var deviveryHistory = new List<DeliveryHistory>();
+                            List<DailyOrder> orderDetail = _blDailyOrder.GetDailyOrderByCustomer(customer.Id);
+                            if (orderDetail?.Count > 0)
                             {
-                                deviveryHistory.Add(new DeliveryHistory()
+                                foreach (var item in orderDetail)
                                 {
-                                    OrderId = item.Id,
-                                    Price = item.Price,
-                                    DeliveryDate = item.DeliveryDate,
-                                    OrderCode = item.OrderCode,
-                                    OrderType = item.OrderType,
-                                    Quantity = item.Quantity,
-                                    Status = (int)OrderStatus.CancelOrder,
-                                    EditMode = EditMode.Add
+                                    deviveryHistory.Add(new DeliveryHistory()
+                                    {
+                                        OrderId = item.Id,
+                                        Price = item.Price,
+                                        DeliveryDate = item.DeliveryDate,
+                                        OrderCode = item.OrderCode,
+                                        OrderType = item.OrderType,
+                                        Quantity = item.Quantity,
+                                        Status = (int)OrderStatus.CancelOrder,
+                                        EditMode = EditMode.Add
+                                    });
+
+
+                                }
+                                if (deviveryHistory?.Count > 0)
+                                {
+                                    SaveData(deviveryHistory);
+                                }
+
+                                orderDetail.ForEach(o =>
+                                {
+                                    o.EditMode = EditMode.Update;
+                                    o.Status = (int)OrderStatus.CancelOrder;
                                 });
-
-
+                                if (orderDetail?.Count > 0)
+                                {
+                                    SaveData(orderDetail);
+                                }
                             }
-                            orderDetail.ForEach(o => o.EditMode = EditMode.Delete);
-                        }
+                            if (customer.OrderType == 1)
+                            {
+                                DateTime startDate = customer.StartDate;
+                                DateTime endDate = customer.EndDate;
 
-                        if (deviveryHistory?.Count > 0 && orderDetail?.Count > 0)
-                        {
-                            SaveData(deviveryHistory);
-                            SaveData(orderDetail);
-                        }
-                        if(customer.OrderType == 1)
-                        {
-                            DateTime startDate = customer.StartDate;
-                            DateTime endDate = customer.EndDate;
-                           
-                            for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+                                for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+                                {
+                                    var orderCode = _dlBase.SelectNewCode<string>("DailyOrder");
+
+                                    if (combo.NumberOfDate != 0)
+                                    {
+                                        price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
+                                        quantity = combo.TotalMeals / combo.NumberOfDate;
+                                    }
+                                    orderDaily.Add(new DailyOrder()
+                                    {
+                                        CustomerId = customer.Id,
+                                        OrderCode = orderCode,
+                                        ComboId = customer.ComboId,
+                                        ProvinceId = customer.ProvinceId,
+                                        CommuneId = customer.CommuneId,
+                                        DistrictId = customer.DistrictId,
+                                        Address = customer.Address,
+                                        PhoneNumber = customer.PhoneNumber,
+                                        OrderType = customer.OrderType,
+                                        Quantity = quantity,
+                                        Status = (int)OrderStatus.WaitDelivery,
+                                        Note = customer.Note,
+                                        Price = price,
+                                        DeliveryDate = date,
+                                        EditMode = EditMode.Add,
+                                    });
+                                }
+                            }
+                            else
                             {
                                 var orderCode = _dlBase.SelectNewCode<string>("DailyOrder");
-                                decimal price = 0;
-                                int quantity = 0;
-                                if (combo.NumberOfDate != 0)
-                                {
-                                    price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
-                                    quantity = combo.TotalMeals / combo.NumberOfDate;
-                                }
                                 orderDaily.Add(new DailyOrder()
                                 {
                                     CustomerId = customer.Id,
@@ -148,46 +188,33 @@ namespace QLSRM.BL
                                     Address = customer.Address,
                                     PhoneNumber = customer.PhoneNumber,
                                     OrderType = customer.OrderType,
-                                    Quantity = quantity,
+                                    Quantity = customer.TotalMealsPurchased,
                                     Status = (int)OrderStatus.WaitDelivery,
                                     Note = customer.Note,
-                                    Price = price,
-                                    DeliveryDate = date,
+                                    Price = customer.ComboPrice,
+                                    DeliveryDate = DateTime.Now,
                                     EditMode = EditMode.Add,
                                 });
                             }
-                        }
-                        else
-                        {
-                            var orderCode = _dlBase.SelectNewCode<string>("DailyOrder");
-                            decimal price = 0;
-                            int quantity = 0;
-                            orderDaily.Add(new DailyOrder()
-                            {
-                                CustomerId = customer.Id,
-                                OrderCode = orderCode,
-                                ComboId = customer.ComboId,
-                                ProvinceId = customer.ProvinceId,
-                                CommuneId = customer.CommuneId,
-                                DistrictId = customer.DistrictId,
-                                Address = customer.Address,
-                                PhoneNumber = customer.PhoneNumber,
-                                OrderType = customer.OrderType,
-                                Quantity = customer.TotalMealsPurchased,
-                                Status = (int)OrderStatus.WaitDelivery,
-                                Note = customer.Note,
-                                Price = customer.ComboPrice,
-                                DeliveryDate = DateTime.Now,
-                                EditMode = EditMode.Add,
-                            });
-                        }
 
+                        }
+                    }
+                    if (orderDaily?.Count > 0)
+                    {
+                        SaveData(orderDaily);
+                    }
+                    if (notification?.Count > 0)
+                    {
+
+                        SaveData(notification);
                     }
                 }
-                if (orderDaily?.Count > 0)
-                {
-                    SaveData(orderDaily);
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lưu dữ liệu DailyOrder: " + ex);
+                throw ex;
+
             }
         }
     }

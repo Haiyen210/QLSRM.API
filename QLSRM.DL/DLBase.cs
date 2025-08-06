@@ -55,7 +55,7 @@ namespace QLSRM.DL
                         var value = item.GetType().GetProperty("EditMode")?.GetValue(item, null);
                         if (value != null)
                         {
-                            item.GetType().GetProperty("CreatedBy")?.SetValue(item, Session.UserCode);
+                            item.GetType().GetProperty("CreatedBy")?.SetValue(item, Session.UserId);
                             item.GetType().GetProperty("ModifiedBy")?.SetValue(item, Session.UserCode);
                             switch (value)
                             {
@@ -64,7 +64,7 @@ namespace QLSRM.DL
                                     item.GetType().GetProperty("ModifiedDate")?.SetValue(item, DateTime.Now);
                                     break;
                                 case EditMode.Update:
-                                    item.GetType().GetProperty("ModifiedBy")?.SetValue(item, Session.UserCode);
+                                    item.GetType().GetProperty("ModifiedBy")?.SetValue(item, Session.UserId);
                                     item.GetType().GetProperty("ModifiedDate")?.SetValue(item, DateTime.Now);
                                     break;
                             }

@@ -53,4 +53,17 @@
         DeActivate = 2,
         WaitActive = 3
     }
+    public enum ActionNotifi
+    {
+        None = 0,
+        AddCustomer = 1,
+        UodateCustomer = 2,
+        DeleteCustomer = 3
+    }
+    public enum StatusNoti
+    {
+        None = 0,
+        Active = 1,
+        DeActivate = 2
+    }
 }
