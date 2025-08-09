@@ -1,6 +1,7 @@
 ﻿
 using QLSRM.DL;
 using QLSRM.Models;
+using QLSRM.Models.Respones;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,10 @@ namespace QLSRM.BL
         public Account? Login(LoginParam login)
         {
             return _dlAccount.Login(login);
+        }
+        public DashboardStatistics? GetDashboardStatistics()
+        {
+            return _dlAccount.GetDashboardStatistics();
         }
     }
 }

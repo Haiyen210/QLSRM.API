@@ -12,7 +12,7 @@ namespace QLSRM.Models
         public string OrderCode { get; set; }
         public long AccountId { get; set; }
         public DateTime AssignedAt { get; set; }
-        public string DeliveryStatus { get; set; }
+        public int DeliveryStatus { get; set; }
         public DateTime DeliveredAt { get; set; }//Thời gian giao hàng thực tế
         public string DeliveryNotes { get; set; }
     }

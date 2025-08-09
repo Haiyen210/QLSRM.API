@@ -15,26 +15,42 @@ namespace QLSRM.BL
         }
 
 
-        public override void PreSaveData<T>(List<T> datas)
+        public override void AfterSaveData<T>(List<T> datas)
         {
-            base.PreSaveData(datas);
+            base.AfterSaveData(datas);
             if (datas?.Count > 0)
             {
+                var orderList = new List<DailyOrder>();
                 foreach (var o in datas)
                 {
-                    DeliveryAssignments employee = Common.Commonfunc.CastToSpecificType<DeliveryAssignments>(o);
+                    DeliveryAssignments deliveryAssignment = Common.Commonfunc.CastToSpecificType<DeliveryAssignments>(o);
                   
-                    if (employee != null && employee.EditMode == EditMode.Add)
-                    {
+                    //if (deliveryAssignment != null && deliveryAssignment.EditMode == EditMode.Add)
+                    //{
                        
-                    }
-                    if (employee != null && employee.EditMode == EditMode.Update)
+                    //}
+                    if (deliveryAssignment != null && deliveryAssignment.EditMode == EditMode.Update)
                     {
-                      
 
+                        if(deliveryAssignment.DeliveryStatus == (int)OrderStatus.SuccessfulDelivery || deliveryAssignment.DeliveryStatus == (int)OrderStatus.CancelOrder)
+                        {
+                            var dailyOrder = _dlBase.GetById<DailyOrder>(deliveryAssignment.Id);
+
+                            if (dailyOrder != null)
+                            {
+                                dailyOrder.Status = deliveryAssignment.DeliveryStatus;
+                                dailyOrder.EditMode = EditMode.Update;
+                                orderList.Add(dailyOrder);
+                            }
+                        }
                     }
                    
                 }
+                if(orderList.Count > 0)
+                {
+                    SaveData(orderList);
+                }
+            
             }
         }
     }

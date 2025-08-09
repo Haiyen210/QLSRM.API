@@ -1,6 +1,7 @@
 ﻿using QLSRM.DL;
 using QLSRM.Library;
 using QLSRM.Models;
+using QLSRM.Models.Respones;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,10 @@ namespace QLSRM.BL
         {
             return _dlDaiLyOrder.GetDailyOrderByCustomer(customerId);
         }
-
+        public List<TodayDeliveryOrder> GetTodayDeliveryOrders()
+        {
+            return _dlDaiLyOrder.GetTodayDeliveryOrders();
+        }
         public override void AfterSaveData<T>(List<T> datas)
         {
             try
@@ -35,13 +39,11 @@ namespace QLSRM.BL
                     foreach (var o in datas)
                     {
                         DailyOrder orderDaily = Common.Commonfunc.CastToSpecificType<DailyOrder>(o);
-
+                        var customer = _dlBase.GetById<Customer>(orderDaily.CustomerId);
                         if (orderDaily != null && orderDaily.EditMode == EditMode.Update)
                         {
                             if (orderDaily.Status == (int)OrderStatus.CancelOrder)
                             {
-                                var customer = _dlBase.GetById<Customer>(orderDaily.CustomerId);
-
                                 if (customer.OrderType == 1)
                                 {
                                     var newDeliveryDate = customer.EndDate.AddDays(1);
@@ -83,6 +85,11 @@ namespace QLSRM.BL
                                     Status = (int)OrderStatus.SuccessfulDelivery,
                                     EditMode = EditMode.Add
                                 });
+
+                                customer.EditMode = EditMode.Update;
+                                int quantityOrdered = Math.Max(0, orderDaily.Quantity);
+                                customer.MealsRemaining = customer.TotalMealsPurchased - quantityOrdered;
+                                customerList.Add(customer);
 
                                 if (deviveryHistory.Count > 0)
                                 {

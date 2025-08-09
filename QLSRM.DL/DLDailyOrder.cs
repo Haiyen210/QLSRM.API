@@ -2,6 +2,7 @@
 using QLSRM.Common;
 using QLSRM.Library;
 using QLSRM.Models;
+using QLSRM.Models.Respones;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,12 @@ namespace QLSRM.DL
         public List<DailyOrder> GetDailyOrderByCustomer(long customerId)
         {
             return ExecuteReader<DailyOrder>("Proc_GetDailyOrderByCustomer", new { customerId });
+
+
+        }
+        public List<TodayDeliveryOrder> GetTodayDeliveryOrders()
+        {
+            return ExecuteReader<TodayDeliveryOrder>("sp_GetTodayDeliveryOrders",null);
 
 
         }
