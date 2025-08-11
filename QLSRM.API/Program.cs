@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using QLSRM.API.Core;
 using QLSRM.BL;
 using QLSRM.Common;
+using QLSRM.DL;
 using QLSRM.Library;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,6 +73,7 @@ builder.Services.AddScoped<BLProvince>();
 builder.Services.AddScoped<BLDailyOrder>();
 builder.Services.AddScoped<BLNotification>();
 builder.Services.AddScoped<BLDeliveryAssignments>();
+builder.Services.AddScoped<DLDeliveryHistory>();
 
 
 
