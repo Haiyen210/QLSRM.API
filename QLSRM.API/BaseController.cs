@@ -9,7 +9,7 @@ using QLSRM.Models;
 
 namespace QLSRM.API
 {
-    [Authorize]
+    //[Authorize]
     public class BaseController<TEntity> : ControllerBase
     {
         public BLBase    _blBase { get; set; }

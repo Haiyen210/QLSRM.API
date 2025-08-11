@@ -1,4 +1,5 @@
-﻿using QLSRM.Library;
+﻿using QLSRM.DL;
+using QLSRM.Library;
 using QLSRM.Models;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,13 @@ namespace QLSRM.BL
 {
     public class BLCustomer : BLBase
     {
-        public BLCustomer _blCustomer { get; set; }
-        public BLDailyOrder _blDailyOrder { get; set; }
+        public DLCustomer _dlCustomer { get; set; }
+        public DLDailyOrder _dlDailyOrder { get; set; }
 
         public BLCustomer()
         {
-            _blCustomer = new BLCustomer();
+            _dlCustomer = new DLCustomer();
+            _dlDailyOrder = new DLDailyOrder();
         }
 
         public override void AfterSaveData<T>(List<T> datas)
@@ -106,7 +108,7 @@ namespace QLSRM.BL
                         if (customer != null && customer.EditMode == EditMode.Update)
                         {
                             var deviveryHistory = new List<DeliveryHistory>();
-                            List<DailyOrder> orderDetail = _blDailyOrder.GetDailyOrderByCustomer(customer.Id);
+                            List<DailyOrder> orderDetail = _dlDailyOrder.GetDailyOrderByCustomer(customer.Id);
                             if (orderDetail?.Count > 0)
                             {
                                 foreach (var item in orderDetail)
