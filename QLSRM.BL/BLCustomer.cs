@@ -15,11 +15,13 @@ namespace QLSRM.BL
     {
         public DLCustomer _dlCustomer { get; set; }
         public DLDailyOrder _dlDailyOrder { get; set; }
+        public DLComboTypes _dlCombo { get; set; }
 
         public BLCustomer()
         {
             _dlCustomer = new DLCustomer();
             _dlDailyOrder = new DLDailyOrder();
+            _dlCombo = new DLComboTypes();
         }
 
         public override void AfterSaveData<T>(List<T> datas)
@@ -36,22 +38,27 @@ namespace QLSRM.BL
                     foreach (var o in datas)
                     {
                         Customer customer = Common.Commonfunc.CastToSpecificType<Customer>(o);
-                        var combo = _dlBase.GetById<ComboTypes>(customer.ComboId);
+                      
 
                         if (customer != null && customer.EditMode == EditMode.Add)
                         {
+                            var combo = _dlCombo.GetById<ComboTypes>(customer.ComboId);
                             if (customer.OrderType == 1)
                             {
                                 DateTime startDate = customer.StartDate;
                                 DateTime endDate = customer.EndDate;
                                 for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
                                 {
-                                    var orderCode = _dlBase.SelectNewCode<string>("DailyOrder");
-                                    if (combo.NumberOfDate != 0)
+                                    var orderCode = _dlDailyOrder.SelectNewCode<string>("DailyOrder");
+                                    if (combo != null)
                                     {
-                                        price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
-                                        quantity = combo.TotalMeals / combo.NumberOfDate;
+                                        if (combo.NumberOfDate != 0)
+                                        {
+                                            price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
+                                            quantity = combo.TotalMeals / combo.NumberOfDate;
+                                        }
                                     }
+
                                     orderDaily.Add(new DailyOrder()
                                     {
                                         CustomerId = customer.Id,
@@ -102,11 +109,13 @@ namespace QLSRM.BL
                                 NotificationType = (int)ActionNotifi.AddCustomer,
                                 ActionDescription = "Thêm khách hàng mới",
                                 Status = (int)StatusNoti.Active,
+                                EditMode = EditMode.Add
                             });
 
                         }
                         if (customer != null && customer.EditMode == EditMode.Update)
                         {
+                            var combo = _dlCombo.GetById<ComboTypes>(customer.ComboId);
                             var deviveryHistory = new List<DeliveryHistory>();
                             List<DailyOrder> orderDetail = _dlDailyOrder.GetDailyOrderByCustomer(customer.Id);
                             if (orderDetail?.Count > 0)
@@ -149,12 +158,15 @@ namespace QLSRM.BL
 
                                 for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
                                 {
-                                    var orderCode = _dlBase.SelectNewCode<string>("DailyOrder");
+                                    var orderCode = _dlDailyOrder.SelectNewCode<string>("DailyOrder");
 
-                                    if (combo.NumberOfDate != 0)
+                                    if (combo != null)
                                     {
-                                        price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
-                                        quantity = combo.TotalMeals / combo.NumberOfDate;
+                                        if (combo.NumberOfDate != 0)
+                                        {
+                                            price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
+                                            quantity = combo.TotalMeals / combo.NumberOfDate;
+                                        }
                                     }
                                     orderDaily.Add(new DailyOrder()
                                     {
@@ -178,7 +190,7 @@ namespace QLSRM.BL
                             }
                             else
                             {
-                                var orderCode = _dlBase.SelectNewCode<string>("DailyOrder");
+                                var orderCode = _dlDailyOrder.SelectNewCode<string>("DailyOrder");
                                 orderDaily.Add(new DailyOrder()
                                 {
                                     CustomerId = customer.Id,
