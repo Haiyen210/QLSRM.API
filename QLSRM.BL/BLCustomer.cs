@@ -33,6 +33,8 @@ namespace QLSRM.BL
                 {
                     var orderDaily = new List<DailyOrder>();
                     var notification = new List<Notification>();
+                    var deviveryHistory = new List<DeliveryHistory>();
+                    var orderDetail = new List<DailyOrder>();
                     decimal price = 0;
                     int quantity = 0;
                     foreach (var o in datas)
@@ -111,13 +113,12 @@ namespace QLSRM.BL
                                 Status = (int)StatusNoti.Active,
                                 EditMode = EditMode.Add
                             });
-
                         }
+                       
                         if (customer != null && customer.EditMode == EditMode.Update)
                         {
+                            orderDetail = _dlDailyOrder.GetDailyOrderByCustomer(customer.Id);
                             var combo = _dlCombo.GetById<ComboTypes>(customer.ComboId);
-                            var deviveryHistory = new List<DeliveryHistory>();
-                            List<DailyOrder> orderDetail = _dlDailyOrder.GetDailyOrderByCustomer(customer.Id);
                             if (orderDetail?.Count > 0)
                             {
                                 foreach (var item in orderDetail)
@@ -136,20 +137,12 @@ namespace QLSRM.BL
 
 
                                 }
-                                if (deviveryHistory?.Count > 0)
-                                {
-                                    SaveData(deviveryHistory);
-                                }
-
                                 orderDetail.ForEach(o =>
                                 {
                                     o.EditMode = EditMode.Update;
                                     o.Status = (int)OrderStatus.CancelOrder;
                                 });
-                                if (orderDetail?.Count > 0)
-                                {
-                                    SaveData(orderDetail);
-                                }
+                              
                             }
                             if (customer.OrderType == 1)
                             {
@@ -210,8 +203,12 @@ namespace QLSRM.BL
                                     EditMode = EditMode.Add,
                                 });
                             }
-
                         }
+                    }
+                   
+                    if (deviveryHistory?.Count > 0)
+                    {
+                        SaveData(deviveryHistory);
                     }
                     if (orderDaily?.Count > 0)
                     {
@@ -221,6 +218,10 @@ namespace QLSRM.BL
                     {
 
                         SaveData(notification);
+                    }
+                    if (orderDetail?.Count > 0)
+                    {
+                        SaveData(orderDetail);
                     }
                 }
             }
