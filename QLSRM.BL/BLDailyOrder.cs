@@ -44,32 +44,36 @@ namespace QLSRM.BL
                         {
                             if (orderDaily.Status == (int)OrderStatus.CancelOrder)
                             {
-                                if (customer.OrderType == 1)
+                                if(customer != null)
                                 {
-                                    var newDeliveryDate = customer.EndDate.AddDays(1);
-                                    customer.EndDate = newDeliveryDate;
-                                    customer.EditMode = EditMode.Update;
-                                    customerList.Add(customer);
-                                    var orderCode = _dlBase.SelectNewCode<string>("DailyOrder");
-                                    orderList.Add(new DailyOrder()
+                                    if (customer.OrderType == 1)
                                     {
-                                        CustomerId = customer.Id,
-                                        OrderCode = orderCode,
-                                        ComboId = customer.ComboId,
-                                        ProvinceId = customer.ProvinceId,
-                                        CommuneId = customer.CommuneId,
-                                        DistrictId = customer.DistrictId,
-                                        Address = customer.Address,
-                                        PhoneNumber = customer.PhoneNumber,
-                                        OrderType = customer.OrderType,
-                                        Quantity = orderDaily.Quantity,
-                                        Status = (int)OrderStatus.WaitDelivery,
-                                        Note = customer.Note,
-                                        Price = orderDaily.Price,
-                                        DeliveryDate = newDeliveryDate,
-                                        EditMode = EditMode.Add,
-                                    });
+                                        var newDeliveryDate = customer.EndDate.AddDays(1);
+                                        customer.EndDate = newDeliveryDate;
+                                        customer.EditMode = EditMode.Update;
+                                        customerList.Add(customer);
+                                        var orderCode = _dlBase.SelectNewCode<string>("DailyOrder");
+                                        orderList.Add(new DailyOrder()
+                                        {
+                                            CustomerId = customer.Id,
+                                            OrderCode = orderCode,
+                                            ComboId = customer.ComboId,
+                                            ProvinceId = customer.ProvinceId,
+                                            CommuneId = customer.CommuneId,
+                                            DistrictId = customer.DistrictId,
+                                            Address = customer.Address,
+                                            PhoneNumber = customer.PhoneNumber,
+                                            OrderType = customer.OrderType,
+                                            Quantity = orderDaily.Quantity,
+                                            Status = (int)OrderStatus.WaitDelivery,
+                                            Note = customer.Note,
+                                            Price = orderDaily.Price,
+                                            DeliveryDate = newDeliveryDate,
+                                            EditMode = EditMode.Add,
+                                        });
+                                    }
                                 }
+                               
 
                             }
                             if (orderDaily.Status == (int)OrderStatus.SuccessfulDelivery)
@@ -85,22 +89,19 @@ namespace QLSRM.BL
                                     Status = (int)OrderStatus.SuccessfulDelivery,
                                     EditMode = EditMode.Add
                                 });
-
-                                customer.EditMode = EditMode.Update;
-                                int quantityOrdered = Math.Max(0, orderDaily.Quantity);
-                                customer.MealsRemaining = customer.TotalMealsPurchased - quantityOrdered;
-                                customerList.Add(customer);
-
-                                if (deviveryHistory.Count > 0)
+                                if(customer != null)
                                 {
-                                    SaveData(deviveryHistory);
+                                    customer.EditMode = EditMode.Update;
+                                    int quantityOrdered = Math.Max(0, orderDaily.Quantity);
+                                    customer.MealsRemaining = customer.TotalMealsPurchased - quantityOrdered;
+                                    customerList.Add(customer);
                                 }
+                               
 
                             }
                         }
 
                     }
-
                     if (customerList?.Count > 0)
                     {
                         SaveData(customerList);
@@ -108,6 +109,10 @@ namespace QLSRM.BL
                     if (orderList?.Count > 0)
                     {
                         SaveData(orderList);
+                    }
+                    if (deviveryHistory.Count > 0)
+                    {
+                        SaveData(deviveryHistory);
                     }
                 }
             }
