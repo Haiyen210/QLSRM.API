@@ -18,7 +18,7 @@ namespace QLSRM.BL
             _dlCommune = new DLCommune();
 
         }
-        public List<District> GetCommuneByDistric(long Id)
+        public List<Commune> GetCommuneByDistric(long Id)
         {
             return _dlCommune.GetCommuneByDistric(Id);
         }

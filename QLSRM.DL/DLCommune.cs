@@ -19,9 +19,9 @@ namespace QLSRM.DL
 
         }
 
-        public List<District> GetCommuneByDistric(long Id)
+        public List<Commune> GetCommuneByDistric(long Id)
         {
-            return ExecuteReader<District>("Proc_SelectCommuneById", new { Id });
+            return ExecuteReader<Commune>("Proc_SelectCommuneById", new { Id });
         }
     }
 }
