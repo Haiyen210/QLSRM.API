@@ -23,7 +23,21 @@ namespace QLSRM.BL
             _dlDailyOrder = new DLDailyOrder();
             _dlCombo = new DLComboTypes();
         }
-
+        public override void PreSaveData<T>(List<T> datas)
+        {
+            base.PreSaveData(datas);
+            if (datas?.Count > 0)
+            {
+                foreach (var o in datas)
+                {
+                    Customer customer = Common.Commonfunc.CastToSpecificType<Customer>(o);
+                    if (customer != null && customer.EditMode == EditMode.Add)
+                    {
+                        customer.MealsRemaining = customer.TotalMealsPurchased;
+                    } 
+                }
+            }
+        }
         public override void AfterSaveData<T>(List<T> datas)
         {
             try
