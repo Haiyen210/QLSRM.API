@@ -12,7 +12,7 @@ namespace QLSRM.Models
         public string OrderCode { get; set; }
         public long CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public long ComboId { get; set; }
+        public long? ComboId { get; set; }
         public string ComboName { get; set; }
         public long ProvinceId { get; set; }
         public string ProvinceName { get; set; }
