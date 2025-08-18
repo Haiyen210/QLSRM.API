@@ -61,39 +61,43 @@ namespace QLSRM.BL
                             var combo = _dlCombo.GetById<ComboTypes>(customer.ComboId);
                             if (customer.OrderType == 1)
                             {
-                                DateTime startDate = customer.StartDate;
-                                DateTime endDate = customer.EndDate;
-                                for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+                                DateTime? startDate = customer.StartDate;
+                                DateTime? endDate = customer.EndDate;
+                                if (startDate.HasValue && endDate.HasValue)
                                 {
-                                    var orderCode = _dlDailyOrder.SelectNewCode<string>("DailyOrder");
-                                    if (combo != null)
+                                    for (DateTime? date = startDate; date <= endDate; date = date?.AddDays(1))
                                     {
-                                        if (combo.NumberOfDate != 0)
+                                        var orderCode = _dlDailyOrder.SelectNewCode<string>("DailyOrder");
+                                        if (combo != null)
                                         {
-                                            price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
-                                            quantity = combo.TotalMeals / combo.NumberOfDate;
+                                            if (combo.NumberOfDate != 0)
+                                            {
+                                                price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
+                                                quantity = combo.TotalMeals / combo.NumberOfDate;
+                                            }
                                         }
-                                    }
 
-                                    orderDaily.Add(new DailyOrder()
-                                    {
-                                        CustomerId = customer.Id,
-                                        OrderCode = orderCode,
-                                        ComboId = customer.ComboId,
-                                        ProvinceId = customer.ProvinceId,
-                                        CommuneId = customer.CommuneId,
-                                        DistrictId = customer.DistrictId,
-                                        Address = customer.Address,
-                                        PhoneNumber = customer.PhoneNumber,
-                                        OrderType = customer.OrderType,
-                                        Quantity = quantity,
-                                        Status = (int)OrderStatus.WaitDelivery,
-                                        Note = customer.Note,
-                                        Price = price,
-                                        DeliveryDate = date,
-                                        EditMode = EditMode.Add,
-                                    });
+                                        orderDaily.Add(new DailyOrder()
+                                        {
+                                            CustomerId = customer.Id,
+                                            OrderCode = orderCode,
+                                            ComboId = customer.ComboId,
+                                            ProvinceId = customer.ProvinceId,
+                                            CommuneId = customer.CommuneId,
+                                            DistrictId = customer.DistrictId,
+                                            Address = customer.Address,
+                                            PhoneNumber = customer.PhoneNumber,
+                                            OrderType = customer.OrderType,
+                                            Quantity = quantity,
+                                            Status = (int)OrderStatus.WaitDelivery,
+                                            Note = customer.Note,
+                                            Price = price,
+                                            DeliveryDate = date.HasValue ? date.Value : null,
+                                            EditMode = EditMode.Add,
+                                        });
+                                    }
                                 }
+                             
 
                             }
                             else
@@ -160,40 +164,43 @@ namespace QLSRM.BL
                             }
                             if (customer.OrderType == 1)
                             {
-                                DateTime startDate = customer.StartDate;
-                                DateTime endDate = customer.EndDate;
-
-                                for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+                                DateTime? startDate = customer.StartDate;
+                                DateTime? endDate = customer.EndDate;
+                                if(startDate.HasValue || endDate.HasValue)
                                 {
-                                    var orderCode = _dlDailyOrder.SelectNewCode<string>("DailyOrder");
+                                    for (DateTime? date = startDate; date <= endDate; date = date?.AddDays(1))
+                                    {
+                                        var orderCode = _dlDailyOrder.SelectNewCode<string>("DailyOrder");
 
-                                    if (combo != null)
-                                    {
-                                        if (combo.NumberOfDate != 0)
+                                        if (combo != null)
                                         {
-                                            price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
-                                            quantity = combo.TotalMeals / combo.NumberOfDate;
+                                            if (combo.NumberOfDate != 0)
+                                            {
+                                                price = Math.Round(customer.ComboPrice / combo.NumberOfDate, 2);
+                                                quantity = combo.TotalMeals / combo.NumberOfDate;
+                                            }
                                         }
+                                        orderDaily.Add(new DailyOrder()
+                                        {
+                                            CustomerId = customer.Id,
+                                            OrderCode = orderCode,
+                                            ComboId = customer.ComboId,
+                                            ProvinceId = customer.ProvinceId,
+                                            CommuneId = customer.CommuneId,
+                                            DistrictId = customer.DistrictId,
+                                            Address = customer.Address,
+                                            PhoneNumber = customer.PhoneNumber,
+                                            OrderType = customer.OrderType,
+                                            Quantity = quantity,
+                                            Status = (int)OrderStatus.WaitDelivery,
+                                            Note = customer.Note,
+                                            Price = price,
+                                            DeliveryDate = date.HasValue ? date.Value : null,
+                                            EditMode = EditMode.Add,
+                                        });
                                     }
-                                    orderDaily.Add(new DailyOrder()
-                                    {
-                                        CustomerId = customer.Id,
-                                        OrderCode = orderCode,
-                                        ComboId = customer.ComboId,
-                                        ProvinceId = customer.ProvinceId,
-                                        CommuneId = customer.CommuneId,
-                                        DistrictId = customer.DistrictId,
-                                        Address = customer.Address,
-                                        PhoneNumber = customer.PhoneNumber,
-                                        OrderType = customer.OrderType,
-                                        Quantity = quantity,
-                                        Status = (int)OrderStatus.WaitDelivery,
-                                        Note = customer.Note,
-                                        Price = price,
-                                        DeliveryDate = date,
-                                        EditMode = EditMode.Add,
-                                    });
                                 }
+                              
                             }
                             else
                             {

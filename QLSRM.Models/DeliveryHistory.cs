@@ -10,7 +10,7 @@ namespace QLSRM.Models
     {
         public long OrderId { get; set; }
         public string OrderCode { get; set; }
-        public DateTime DeliveryDate { get; set; }
+        public DateTime? DeliveryDate { get; set; }
         public int Quantity { get; set; }
         public int Status { get; set; }
         public int DeliveryNote { get; set; }

@@ -21,8 +21,8 @@ namespace QLSRM.Models
         public decimal ComboPrice { get; set; }
         public int TotalMealsPurchased { get; set; } //Tổng số suất ăn trong ngày
         public int MealsRemaining { get; set; } //Số suất ăn còn lại
-        public DateTime StartDate { get; set; } 
-        public DateTime EndDate { get; set; } 
+        public DateTime? StartDate { get; set; } 
+        public DateTime? EndDate { get; set; } 
         public string Note { get; set; } 
         public int Status { get; set; }
         public long ProvinceId { get; set; }

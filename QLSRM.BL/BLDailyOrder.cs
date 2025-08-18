@@ -48,7 +48,7 @@ namespace QLSRM.BL
                                 {
                                     if (customer.OrderType == 1)
                                     {
-                                        var newDeliveryDate = customer.EndDate.AddDays(1);
+                                        var newDeliveryDate = customer.EndDate?.AddDays(1);
                                         customer.EndDate = newDeliveryDate;
                                         customer.EditMode = EditMode.Update;
                                         customerList.Add(customer);
@@ -68,7 +68,7 @@ namespace QLSRM.BL
                                             Status = (int)OrderStatus.WaitDelivery,
                                             Note = customer.Note,
                                             Price = orderDaily.Price,
-                                            DeliveryDate = newDeliveryDate,
+                                            DeliveryDate = newDeliveryDate.Value,
                                             EditMode = EditMode.Add,
                                         });
                                     }
