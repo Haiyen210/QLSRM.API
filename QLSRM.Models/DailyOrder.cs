@@ -10,15 +10,15 @@ namespace QLSRM.Models
     public class DailyOrder : BaseEntity
     {
         public string OrderCode { get; set; }
-        public long? CustomerId { get; set; }
+        public long CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public long? ComboId { get; set; }
+        public long ComboId { get; set; }
         public string ComboName { get; set; }
-        public long? ProvinceId { get; set; }
+        public long ProvinceId { get; set; }
         public string ProvinceName { get; set; }
-        public long? DistrictId { get; set; }
+        public long DistrictId { get; set; }
         public string DistrictName { get; set; }
-        public long? CommuneId { get; set; }
+        public long CommuneId { get; set; }
         public string CommuneName { get; set; }
         public DateTime? DeliveryDate { get; set; } //Ngày giao hàng
         public string Address { get; set; }
