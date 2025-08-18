@@ -396,7 +396,7 @@ namespace QLSRM.DL
         {
             return ExecuteScalar<T>($"Proc_SelectNew{tableName}Code", null);
         }
-        public T GetById<T>(long id)
+        public T GetById<T>(long? id)
         {
             return ExecuteReader<T>($"Proc_Select{typeof(T).Name}ById", new { Id = id }).FirstOrDefault();
         }

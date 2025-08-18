@@ -52,7 +52,7 @@ namespace QLSRM.BL
         {
             return _dlBase.SelectNewCode<T>(tableName);
         }
-        public T GetById<T>(long id)
+        public T GetById<T>(long? id)
         {
             return _dlBase.GetById<T>(id);
         }

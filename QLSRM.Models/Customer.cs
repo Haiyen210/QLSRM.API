@@ -14,9 +14,9 @@ namespace QLSRM.Models
         public string Address { get; set; }
         public int Gender { get; set; }
         public int OrderType { get; set; }
-        public long ComboId { get; set; }
+        public long? ComboId { get; set; }
         public string ComboName { get; set; }
-        public long ProductId { get; set; }
+        public long? ProductId { get; set; }
         public string ProductName { get; set; }
         public decimal ComboPrice { get; set; }
         public int TotalMealsPurchased { get; set; } //Tổng số suất ăn trong ngày
