@@ -20,6 +20,10 @@ namespace QLSRM.DL
         public DashboardStatistics? GetDashboardStatistics()
         {
             return ExecuteReader<DashboardStatistics>("sp_GetDashboardStatistics", null).FirstOrDefault();
+        }  
+        public List<Account> SelectAllAccountRoleShipper()
+        {
+            return ExecuteReader<Account>("Proc_SelectAllAccountRoleShipper", null);
         }
     }
 }

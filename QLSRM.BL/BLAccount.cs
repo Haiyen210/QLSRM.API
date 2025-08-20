@@ -25,6 +25,10 @@ namespace QLSRM.BL
         public DashboardStatistics? GetDashboardStatistics()
         {
             return _dlAccount.GetDashboardStatistics();
+        } 
+        public List<Account> SelectAllAccountRoleShipper()
+        {
+            return _dlAccount.SelectAllAccountRoleShipper();
         }
     }
 }
