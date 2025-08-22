@@ -19,6 +19,7 @@ namespace QLSRM.BL
             if (datas?.Count > 0)
             {
                 var orderList = new List<DailyOrder>();
+                var deviveryHistory = new List<DeliveryHistory>();
                 foreach (var o in datas)
                 {
                     DeliveryAssignments deliveryAssignment = Common.Commonfunc.CastToSpecificType<DeliveryAssignments>(o);
@@ -39,6 +40,17 @@ namespace QLSRM.BL
                                 dailyOrder.Status = deliveryAssignment.DeliveryStatus;
                                 dailyOrder.EditMode = EditMode.Update;
                                 orderList.Add(dailyOrder);
+                                deviveryHistory.Add(new DeliveryHistory()
+                                {
+                                    OrderId = dailyOrder.Id,
+                                    Price = dailyOrder.Price,
+                                    DeliveryDate = dailyOrder.DeliveryDate,
+                                    OrderCode = dailyOrder.OrderCode,
+                                    OrderType = dailyOrder.OrderType,
+                                    Quantity = dailyOrder.Quantity,
+                                    Status = deliveryAssignment.DeliveryStatus,
+                                    EditMode = EditMode.Add
+                                });
                             }
                         }
                     }
@@ -48,7 +60,10 @@ namespace QLSRM.BL
                 {
                     SaveData(orderList);
                 }
-            
+                if (deviveryHistory.Count > 0)
+                {
+                    SaveData(deviveryHistory);
+                }
             }
         }
     }
