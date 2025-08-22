@@ -13,26 +13,6 @@ namespace QLSRM.BL
         public BLDeliveryAssignments()
         {
         }
-        public override void PreSaveData<T>(List<T> datas)
-        {
-            base.PreSaveData(datas);
-            if (datas?.Count > 0)
-            {
-              
-                foreach (var o in datas)
-                {
-                    DeliveryAssignments deliveryAssignment = Common.Commonfunc.CastToSpecificType<DeliveryAssignments>(o);
-
-                    if (deliveryAssignment != null && deliveryAssignment.EditMode == EditMode.Add)
-                    {
-                        var dailyOrder = _dlBase.GetById<DailyOrder>(deliveryAssignment.OrderId);
-                        deliveryAssignment.OrderCode = dailyOrder.OrderCode;
-                    }
-                  
-                }
-            }
-        }
-
         public override void AfterSaveData<T>(List<T> datas)
         {
             base.AfterSaveData(datas);
