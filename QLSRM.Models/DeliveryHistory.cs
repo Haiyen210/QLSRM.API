@@ -16,5 +16,8 @@ namespace QLSRM.Models
         public int DeliveryNote { get; set; }
         public decimal Price { get; set; }
         public int OrderType { get; set; }
+        public string PhoneNumber { get; set; }
+        public string CustomerName { get; set; }
+        public string Address { get; set; }
     }
 }
