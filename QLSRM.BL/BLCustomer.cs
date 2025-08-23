@@ -136,7 +136,7 @@ namespace QLSRM.BL
                             }
                             notification.Add(new Notification()
                             {
-                                Message = $"Khách hàng {customer.CustomerName} đã đăng ký {(customer.OrderType == 1 ? "combo" : "lẻ")} thành công!",
+                                Message = $"Khách hàng {customer.CustomerName} đã đăng ký sản phẩm {(customer.OrderType == 1 ? "combo" : "lẻ")} thành công!",
                                 NotificationType = (int)ActionNotifi.AddCustomer,
                                 ActionDescription = "Thêm khách hàng mới",
                                 Status = (int)StatusNoti.Active,

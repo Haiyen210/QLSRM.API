@@ -1,4 +1,5 @@
-﻿using QLSRM.Library;
+﻿using QLSRM.DL;
+using QLSRM.Library;
 using QLSRM.Models;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace QLSRM.BL
             {
                 var orderList = new List<DailyOrder>();
                 var deviveryHistory = new List<DeliveryHistory>();
+                var customerList = new List<Customer>();
                 foreach (var o in datas)
                 {
                     DeliveryAssignments deliveryAssignment = Common.Commonfunc.CastToSpecificType<DeliveryAssignments>(o);
@@ -51,6 +53,18 @@ namespace QLSRM.BL
                                     Status = deliveryAssignment.DeliveryStatus,
                                     EditMode = EditMode.Add
                                 });
+                                if(deliveryAssignment.DeliveryStatus == (int)OrderStatus.SuccessfulDelivery)
+                                {
+                                    var customer = _dlBase.GetById<Customer>(dailyOrder.CustomerId);
+                                    if (customer != null)
+                                    {
+                                        customer.EditMode = EditMode.Update;
+                                        int quantityOrdered = Math.Max(0, dailyOrder.Quantity);
+                                        customer.MealsRemaining = customer.MealsRemaining - quantityOrdered;
+                                        customer.MealsUsed = customer.MealsUsed + quantityOrdered;
+                                        customerList.Add(customer);
+                                    }
+                                }
                             }
                         }
                     }
@@ -63,6 +77,10 @@ namespace QLSRM.BL
                 if (deviveryHistory.Count > 0)
                 {
                     SaveData(deviveryHistory);
+                }
+                if (customerList.Count > 0)
+                {
+                    SaveData(customerList);
                 }
             }
         }
