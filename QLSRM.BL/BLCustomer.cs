@@ -35,6 +35,17 @@ namespace QLSRM.BL
                     {
                         customer.MealsRemaining = customer.TotalMealsPurchased;
                     } 
+                    if(customer != null && customer.EditMode == EditMode.Update)
+                    {
+                        if(customer.MealsUsed == 0)
+                        {
+                            customer.MealsRemaining = customer.TotalMealsPurchased;
+                        }
+                        if(customer.MealsUsed > 0)
+                        {
+                            customer.MealsRemaining = customer.TotalMealsPurchased - customer.MealsUsed;
+                        }
+                    }
                 }
             }
         }

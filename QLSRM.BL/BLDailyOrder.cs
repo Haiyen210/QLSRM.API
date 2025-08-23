@@ -94,6 +94,7 @@ namespace QLSRM.BL
                                     customer.EditMode = EditMode.Update;
                                     int quantityOrdered = Math.Max(0, orderDaily.Quantity);
                                     customer.MealsRemaining = customer.MealsRemaining - quantityOrdered;
+                                    customer.MealsUsed = customer.MealsUsed + quantityOrdered;
                                     customerList.Add(customer);
                                 }
                                

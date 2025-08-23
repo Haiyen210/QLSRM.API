@@ -31,6 +31,7 @@ namespace QLSRM.Models
         public string DistrictName { get; set; }
         public long CommuneId { get; set; }
         public string CommuneName { get; set; }
+        public int MealsUsed { get; set; }
         public string GenderName
         {
             get
