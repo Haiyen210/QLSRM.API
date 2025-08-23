@@ -12,7 +12,7 @@ namespace QLSRM.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class CommonController : ControllerBase
     {
         public BLAccount _blAccount { get; set; }

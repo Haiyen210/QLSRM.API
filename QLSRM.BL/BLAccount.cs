@@ -22,6 +22,7 @@ namespace QLSRM.BL
         {
             return _dlAccount.Login(login);
         }
+       
         public DashboardStatistics? GetDashboardStatistics()
         {
             return _dlAccount.GetDashboardStatistics();

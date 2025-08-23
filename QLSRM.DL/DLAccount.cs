@@ -13,6 +13,7 @@ namespace QLSRM.DL
         public DLAccount()
         {
         }
+     
         public Account? Login(LoginParam login)
         {
             return ExecuteReader<Account>("Proc_Login", login).FirstOrDefault();

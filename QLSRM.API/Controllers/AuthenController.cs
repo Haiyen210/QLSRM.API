@@ -22,17 +22,13 @@ namespace QLSRM.API.Controllers
                 if (login != null && !string.IsNullOrWhiteSpace(login.UserName) && !string.IsNullOrWhiteSpace(login.Password))
                 {
                     var blAccount = new BLAccount();
-                    var account = blAccount.Login(login);
-                    if (account != null)
+                    var employee = blAccount.Login(login);
+                    if (employee != null)
                     {
-                        var token = AuthozirationUtility.RenderAccessToken(account);
+                        var token = AuthozirationUtility.RenderAccessToken(employee);
                         if (!string.IsNullOrWhiteSpace(token))
                         {
-                            HttpContext.Session.SetString("UserId", account.Id.ToString());
-                            HttpContext.Session.SetString("UserName", account.Name ?? "");
-                            HttpContext.Session.SetString("UserRoles", account.Roles.ToString() ?? "");
-
-                            LoginRespone res = new LoginRespone() { Token = $"{JwtBearerDefaults.AuthenticationScheme} {token}", User = account };
+                            LoginRespone res = new LoginRespone() { Token = $"{JwtBearerDefaults.AuthenticationScheme} {token}", User = employee };
                             response.SetSuccess(res);
                         }
                     }

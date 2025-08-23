@@ -73,7 +73,7 @@ builder.Services.AddScoped<BLProvince>();
 builder.Services.AddScoped<BLDailyOrder>();
 builder.Services.AddScoped<BLNotification>();
 builder.Services.AddScoped<BLDeliveryAssignments>();
-builder.Services.AddScoped<DLDeliveryHistory>();
+builder.Services.AddScoped<BLDeliveryHistory>();
 
 
 
@@ -87,7 +87,6 @@ if (app.Environment.IsDevelopment())
 }
 ConfigUtil.SetConfigGlobal(config);
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
