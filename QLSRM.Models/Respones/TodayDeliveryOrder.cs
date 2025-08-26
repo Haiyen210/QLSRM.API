@@ -13,8 +13,9 @@ namespace QLSRM.Models.Respones
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public string Combo { get; set; }
-        public int Quantity { get; set; }
-        public int MealsRemaining { get; set; }
+        public int? Quantity { get; set; }
+        public int? MealsRemaining { get; set; }
+        public int? Status { get; set; }
         public string Shipper { get; set; }
     }
 }
