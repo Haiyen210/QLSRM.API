@@ -32,6 +32,7 @@ namespace QLSRM.Models
         public long CommuneId { get; set; }
         public string CommuneName { get; set; }
         public int MealsUsed { get; set; }
+        public DateTime? DateOddMeals { get; set; }
         public string GenderName
         {
             get

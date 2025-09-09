@@ -129,7 +129,7 @@ namespace QLSRM.BL
                                     Status = (int)OrderStatus.WaitDelivery,
                                     Note = customer.Note,
                                     Price = customer.ComboPrice,
-                                    DeliveryDate = DateTime.Now,
+                                    DeliveryDate = customer.DateOddMeals,
                                     EditMode = EditMode.Add,
                                 });
 
@@ -231,7 +231,7 @@ namespace QLSRM.BL
                                     Status = (int)OrderStatus.WaitDelivery,
                                     Note = customer.Note,
                                     Price = customer.ComboPrice,
-                                    DeliveryDate = DateTime.Now,
+                                    DeliveryDate = customer.DateOddMeals,
                                     EditMode = EditMode.Add,
                                 });
                             }
